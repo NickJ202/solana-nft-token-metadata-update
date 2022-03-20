@@ -14,7 +14,7 @@ import {
 } from '@solana/web3.js';
 import { Metadata } from './metaplex/classes';
 
-const DATA_DIRECTORY = '../src/data/';
+import { DATA_DIRECTORY } from './constants';
 const METADATA_FILE = 'current-metadata-cache.json';
 
 type Creator = {
@@ -63,7 +63,7 @@ export type MetaplexCacheJson = {
 
 type JsonFileContent = string[] | MetadataCacheContent | MetaplexCacheJson;
 
-export const loadData = (file = `${DATA_DIRECTORY}token-list-to-parse.json`): JsonFileContent => {
+export const loadData = (file = `${DATA_DIRECTORY}mint-list.json`): JsonFileContent => {
     const defaultJson = [];
     const thePath = path.resolve(__dirname, file);
     try {
@@ -73,7 +73,7 @@ export const loadData = (file = `${DATA_DIRECTORY}token-list-to-parse.json`): Js
     }
 };
 
-export const saveMetaData = (metadata: string, directory = DATA_DIRECTORY, fileName = METADATA_FILE): void => {
+export const saveMetaData = (metadata: string, directory = DATA_DIRECTORY + "cache/", fileName = METADATA_FILE): void => {
     const theDirectory = path.resolve(__dirname, directory);
     if (!fs.existsSync(theDirectory)) {
         fs.mkdirSync(theDirectory);
@@ -136,7 +136,7 @@ export const getImageUrl = async (meta: Metadata): Promise<string> => {
     return await fetch(meta.data.uri).then((result) => {
         return result.json().then((json) => {
             return (json as any).image;
-        });
+        }).catch((err: any) => console.log("Could not fetch image url"));
     });
 };
 

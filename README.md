@@ -18,8 +18,7 @@ Install dependencies.
 yarn
 ```
 
-Set your Candy Machine ID within: `src/constans.ts`.
-Place all your tokens addresses (mint id) as string array to the `./src/data/token-list-to-parse.json`.
+Place all your token addresses (mint id) as string array to 'mint-list.json' into the DATA_DIRECTORY path from constants.ts
 
 ## Download current meta.
 
@@ -29,18 +28,23 @@ You need download existing metadata for further reuse on `update` command. Run
 yarn download-metadata
 ```
 
-It will get array of tokens from `./src/data/token-list-to-parse.json` and fetch all metadata to the file `src/data/current-metadata-cache.json` (may take ~1hr for 1k items).
+For production
+```
+yarn download-metadata  --env mainnet-beta
+```
+
+It will get array of tokens from `mint-list.json` and fetch all metadata to the file `current-metadata-cache.json` (may take ~1hr for 1k items).
 
 ## Create new updated metadata on Arweave.
 
 It can be done with `metaplex upload` same as when creating new candy machine.
 Tip: You can upload to devnet with same result, arweave links will be still valid.
 Otherwise newly updated links need to be formated to format of `metaplex` cache file.
-Put cache file into -> `./src/data/mainnet-beta-temp.json`
+Put cache file into -> `mainnet-beta-temp.json`
 
 ## Update metadata for tokens
 
-Place `mainnet-beta-temp.json` into `./src/data/`.
+Place `mainnet-beta-temp.json` into the DATA_DIRECTORY path from constants`.
 
 Local keypair should be the same as keypair used to create related Candy Machine, and assumed to be an `Update Authority` for each token in the list.
 Default `env` is `devnet

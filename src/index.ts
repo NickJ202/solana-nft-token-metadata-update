@@ -15,7 +15,6 @@ import { Metadata, Data, Creator } from './metaplex/classes';
 import { getMetadataAddress } from './metaplex/utils';
 import { decodeMetadata, updateMetadataInstruction } from './metaplex/metadata';
 import { MetadataContainer } from './data-types';
-import { CANDY_MACHINE_ID } from './constants';
 
 const RPC_CLUSTER_API = 'https://solana-api.projectserum.com';
 // const RPC_CLUSTER_API = 'https://api.devnet.solana.com';
@@ -70,17 +69,15 @@ program
             console.log(`Decoded #${index}: ${mintMetaData.data.name}`);
             const mintKey = intermediateResult[metaKey];
             console.log('mintMetaData', mintMetaData);
-
-            // only get NFTs from collection
-            if (mintMetaData?.data.creators && mintMetaData?.data.creators[0].address === CANDY_MACHINE_ID.toBase58()) {
-                result[mintKey] = {
-                    metaKey,
-                    mintMetaData,
-                    name: mintMetaData?.data.name,
-                    uri: mintMetaData?.data.uri,
-                    imageUri: mintMetaData && (await getImageUrl(mintMetaData)),
-                };
-            }
+            
+            result[mintKey] = {
+                metaKey,
+                mintMetaData,
+                name: mintMetaData?.data.name,
+                uri: mintMetaData?.data.uri,
+                imageUri: mintMetaData && (await getImageUrl(mintMetaData)),
+            };
+            
         }
 
         console.log('Save the metadata loaded from the chain');
@@ -186,7 +183,7 @@ program
         // failed to update tokens will be stored here and output at the end
         const failed = [];
 
-        // next wee need to update using updateMetadataInstruction
+        // next we need to update using updateMetadataInstruction
         for (const [index, el] of metadataUpdatedFiltered.entries()) {
             const updatedUri = el.metadata.uri;
             const { data, primarySaleHappened, updateAuthority } = el.metadata.mintMetaData;
